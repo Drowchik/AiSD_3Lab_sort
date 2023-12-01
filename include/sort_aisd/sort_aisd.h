@@ -55,5 +55,7 @@ namespace method_sort {
 		}
 		return stat;
 	}
-	
+	stats naturial_two_way_merge_sort(vector<int>& data) {
+		data 
+	}
 }
