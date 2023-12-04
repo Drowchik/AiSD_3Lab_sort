@@ -62,16 +62,16 @@ namespace method_sort {
 
 	void merge_sort_left(vector<int>& a1, vector<int>& a2, vector<int>& temp, size_t start_index) {
 		size_t i = 0;
-		int j = a2.size()-1;
+		int j = 0;
 		size_t k = start_index;
-		while (i < a1.size() && j >= 0) {
+		while (i < a1.size() && j < a2.size()) {
 			if (a1[i] <= a2[j]) {
 				temp[k] = a1[i];
 				i++;
 			}
 			else {
 				temp[k] = a2[j];
-				j--;
+				j++;
 			}
 			k++;
 		}
@@ -80,9 +80,9 @@ namespace method_sort {
 			i++;
 			k++;
 		}
-		while (j >= 0) {
+		while (j < a2.size()) {
 			temp[k] = a2[j];
-			j--;
+			j++;
 			k++;
 		}
 	}
@@ -135,6 +135,7 @@ namespace method_sort {
 			}
 			vector<int> subvector1(a.begin() + left_start, a.begin() + left_end+1);
 			vector<int> subvector2(a.begin() + right_end, a.begin() + right_start+1);
+			reverse(subvector2.begin(), subvector2.end());
 			if (n % 2 == 0) {
 				merge_sort_left(subvector1, subvector2, temp, left);
 				left += subvector1.size() + subvector2.size();
