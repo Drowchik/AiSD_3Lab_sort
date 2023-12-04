@@ -88,16 +88,16 @@ namespace method_sort {
 	}
 	void merge_sort_right(vector<int>& a1, vector<int>& a2, vector<int>& temp, size_t start_index) {
 		size_t i = 0;
-		int j = a2.size() - 1;
-		size_t k = start_index;
-		while (i < a1.size() && j >= 0) {
+		int j = 0;
+		size_t k = start_index+a1.size()+a2.size()-1;
+		while (i < a1.size() && j < a2.size()) {
 			if (a1[i] <= a2[j]) {
 				temp[k] = a1[i];
 				i++;
 			}
 			else {
 				temp[k] = a2[j];
-				j--;
+				j++;
 			}
 			k--;
 		}
@@ -106,17 +106,19 @@ namespace method_sort {
 			i++;
 			k--;
 		}
-		while (j >= 0) {
+		while (j < a2.size()) {
 			temp[k] = a2[j];
-			j--;
+			j++;
 			k--;
 		}
 	}
-	void merge(vector<int>& a) {
+	vector<int> merge(vector<int>& a) {
 		vector<int> temp(a.size());
 		size_t left_start = 0;
 		size_t left_end = 0;
-
+		
+		size_t left = 0;
+		size_t right = a.size();
 		size_t right_start = a.size()-1;
 		size_t right_end = right_start;
 		
@@ -128,14 +130,18 @@ namespace method_sort {
 			while (a[right_end] <= a[right_end - 1] && right_end - 1 != left_end) {
 				right_end--;
 			}
-			vector<int> subvector1(a.begin() + left_start, a.begin() + left_start + left_end+1);
+			if (left_end == right_end) {
+				break;
+			}
+			vector<int> subvector1(a.begin() + left_start, a.begin() + left_end+1);
 			vector<int> subvector2(a.begin() + right_end, a.begin() + right_start+1);
-			size_t la = left_end - left_start + right_start - right_end-1;
 			if (n % 2 == 0) {
-				merge_sort_left(subvector1, subvector2, temp, la);
+				merge_sort_left(subvector1, subvector2, temp, left);
+				left += subvector1.size() + subvector2.size();
 			}
 			else {
-				merge_sort_right(subvector1, subvector2, temp, temp.size()-la-1);
+				right -= subvector1.size() + subvector2.size();
+				merge_sort_right(subvector1, subvector2, temp, right);
 			}
 			left_end++;
 			right_end--;
@@ -145,13 +151,14 @@ namespace method_sort {
 
 			n++;
 		}
-
+		return temp;
 	}
     void natural_merge_sort(vector<int>& a) {
         vector<int> a_prev;
         do {
             a_prev = a;
-            merge(a);
+            a = merge(a);
+			cout << a<<endl;
         } while (a != a_prev);
     }
 
