@@ -11,6 +11,7 @@ namespace method_sort {
 		size_t comparison_count = 0;
 		size_t copy_count = 0;
 	};
+
 	template<typename T>
 	stats sorting_choice(vector<T>& data) {
 		stats stat;
@@ -154,13 +155,14 @@ namespace method_sort {
 		}
 		return temp;
 	}
-    void natural_merge_sort(vector<int>& a) {
+	void natural_merge_sort(vector<int>& a) {
         vector<int> a_prev;
         do {
             a_prev = a;
             a = merge(a);
 			cout << a<<endl;
         } while (a != a_prev);
+
     }
 
 
