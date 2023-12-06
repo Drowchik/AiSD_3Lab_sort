@@ -8,6 +8,21 @@
 
 using namespace std;
 namespace method_sort {
+	struct Person {
+		size_t birth_year;
+		string name;
+		Person() : birth_year(0), name("") {}
+		Person(size_t _birth_year, string _name) : birth_year(_birth_year), name(_name) {}
+	};
+
+	bool operator<(const Person& lhs, const Person& rhs) {
+		return lhs.name < rhs.name;
+	}
+	bool operator>(const Person& lhs, const Person& rhs) {
+		return lhs.name > rhs.name;
+	}
+
+
 	struct stats {
 		size_t comparison_count = 0;
 		size_t copy_count = 0;
@@ -42,7 +57,7 @@ namespace method_sort {
 	ostream& operator<<(ostream& os, const vector<T>& data) {
 		size_t size = data.size();
 		for (size_t i = 0; i < size; i++) {
-			cout << data[i] << " ";
+			os << data[i] << " ";
 		}
 		return os;
 	}
@@ -168,10 +183,8 @@ namespace method_sort {
 			}
 			left_end++;
 			right_end--;
-
 			left_start = left_end;
 			right_start = right_end;
-
 			n++;
 		}
 		return temp;
@@ -186,17 +199,109 @@ namespace method_sort {
         } while (a != a_prev);
 		return stat;
     }
-
+//2 вариант
+//std::vector<int> merge_ascending(std::vector<int> left, std::vector<int> right, stats& stat) {
+//	std::vector<int> result;
+//
+//	int i = 0, j = 0;
+//
+//	if (left.size() != right.size() && left.back() == right.back())
+//		left.pop_back();
+//
+//	while (i < left.size() && j < right.size()) {
+//		stat.comparison_count++;
+//		if (left[i] <= right[j]) {
+//			result.push_back(left[i]);
+//			i++;
+//		}
+//		else {
+//			result.push_back(right[j]);
+//			j++;
+//		}
+//	}
+//	while (i < left.size()) {
+//		result.push_back(left[i]);
+//		i++;
+//	}
+//	while (j < right.size()) {
+//		result.push_back(right[j]);
+//		j++;
+//	}
+//	return result;
+//}
+//
+//std::vector<int> merge_descending(const std::vector<int>& left, const std::vector<int>& right, stats& stat) {
+//	std::vector<int> result = merge_ascending(left, right, stat);
+//	reverse(result.begin(), result.end());
+//	return result;
+//}
+//stats natural_two_way_sort(std::vector<int>& list) {
+//	stats stat;
+//	while (true) {
+//		std::vector<std::vector<int>> series;
+//
+//		int left = -1,
+//			right = list.size();
+//
+//		while (left < right) {
+//			std::vector<int> one_series;
+//
+//			do {
+//				stat.comparison_count++;
+//				left++;
+//				one_series.push_back(list[left]);
+//			} while (left + 1 < right && list[left] <= list[left + 1]);
+//
+//			series.push_back(one_series);
+//
+//			one_series.clear();
+//
+//			do {
+//				stat.comparison_count++;
+//				right--;
+//				one_series.push_back(list[right]);
+//			} while (left - 1 < right && list[right - 1] >= list[right]);
+//
+//			series.push_back(one_series);
+//		}
+//
+//		if (series.size() == 2 && series[1].size() == 1)
+//			break;
+//
+//		std::vector<std::vector<int>> result_left;
+//		std::vector<std::vector<int>> result_right;
+//
+//		int current_series = 0;
+//
+//		while (current_series < series.size() - 1) {
+//			result_left.push_back(merge_ascending(series[current_series], series[current_series + 1], stat));
+//			current_series += 2;
+//
+//			if (current_series >= series.size() - 1)
+//				break;
+//
+//			result_right.insert(result_right.begin(), merge_descending(series[current_series], series[current_series + 1], stat));
+//			current_series += 2;
+//		}
+//
+//		list.clear();
+//		for (auto& s : result_left)
+//			list.insert(list.end(), s.begin(), s.end());
+//		for (auto& s : result_right)
+//			list.insert(list.end(), s.begin(), s.end());
+//	}
+//
+//	return stat;
+//}
 	template<typename T>
-	std::vector<T> random(T a, T b, int n) {
+	std::vector<T> random(T a, T b, int n, size_t i) {
 		std::vector<int> res;
-		std::random_device random_device;
-		std::mt19937 generator(random_device());
+		std::mt19937 gen(i);
 		std::uniform_int_distribution<> distribution(a, b);
 		for (size_t i = 0; i < n; i++) {
 			size_t x = distribution(generator);
 			res.push_back(x);
-		}
+		}//добавить рандомное урпавление seed
 		return res;
 	}
 
